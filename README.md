@@ -49,9 +49,15 @@ waste-classifier/
    git clone https://github.com/your-username/waste-classifier.git
    cd waste-classifier
    
-2. Install dependencies:   pip install -r requirements.txt
+2. Install dependencies:
+   <pre>
+      pip install -r requirements.txt
+   </pre>
 
-4. Run the Streamlit app:   streamlit run app.py
+4. Run the Streamlit app:
+   <pre>
+      streamlit run app.py
+   </pre>
 
 ---
 
