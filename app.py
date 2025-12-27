@@ -39,73 +39,8 @@ def predict_waste(img, model):
     return "Unknown"
 
 # -----------------------
-# Sidebar
+# Hazards Dictionary
 # -----------------------
-st.sidebar.title("Waste Classifier ♻️")
-with st.sidebar.expander("Project Description"):
-    st.write(
-        "An AI-powered app built with Python and Streamlit that classifies waste types from images "
-        "and provides quick recycling tips to promote sustainable practices."
-    )
-
-with st.sidebar.expander("Tools Used"):
-    st.write("- Python  \n- Streamlit  \n- TensorFlow / Keras  \n- Pillow  \n- NumPy")
-
-with st.sidebar.expander("SDG Impact 🌍"):
-    st.write(
-        "- SDG 12: Responsible Consumption and Production  \n"
-        "- SDG 11: Sustainable Cities and Communities  \n"
-        "- SDG 13: Climate Action"
-    )
-
-# -----------------------
-# Main App
-# -----------------------
-st.set_page_config(page_title="Waste Classifier", page_icon="♻️", layout="wide")
-st.title("♻️ AI Waste Classification Tool")
-st.markdown("Upload an image of waste and see instant classification with recycling tips!")
-
-model = load_model()
-
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
-
-if uploaded_file:
-    img = Image.open(uploaded_file)
-
-    # Layout: Columns
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        st.image(img, caption="Uploaded Image", use_column_width=True)
-
-    with col2:
-        st.write("Classifying...")
-        pred_class = predict_waste(img, model)
-
-        # Emoji mapping
-        emoji_map = {
-            "Plastic": "🧴",
-            "Organic": "🍌",
-            "Paper": "📄",
-            "Metal": "🔩",
-            "E-waste": "💻",
-            "Unknown": "❓"
-        }
-
-        # Display prediction with emoji inline
-        st.markdown(f"<h2 style='color:green'>{emoji_map.get(pred_class,'❓')} {pred_class}</h2>", unsafe_allow_html=True)
-
-        # Tips
-        tips = {
-            "Plastic": "Recycle plastics and avoid single-use plastic.",
-            "Organic": "Compost organic waste to make nutrient-rich soil.",
-            "Paper": "Reuse or recycle paper products.",
-            "Metal": "Collect and recycle metals at proper centers.",
-            "E-waste": "Take to e-waste recycling centers safely.",
-            "Unknown": "Try uploading a clearer image."
-        }
-        st.info(tips[pred_class])
-
-        # Hazards by waste type
 hazards = {
     "Plastic": {
         "Health": [
@@ -190,18 +125,97 @@ hazards = {
     }
 }
 
-        # Display only hazards relevant to predicted waste type in colored cards
-    with st.expander(f"⚠️ Hazards of {pred_class} Waste"):
-        col1, col2, col3 = st.columns(3)
+# -----------------------
+# Sidebar
+# -----------------------
+st.sidebar.title("Waste Classifier ♻️")
+with st.sidebar.expander("Project Description"):
+    st.write(
+        "An AI-powered app built with Python and Streamlit that classifies waste types from images "
+        "and provides quick recycling tips to promote sustainable practices."
+    )
 
-            col1.markdown(f"<div style='background-color:#ffcccc; padding:10px; border-radius:10px; color:black;'>"
-                          f"<h5>💊 Health</h5>"
-                          f"<p>{hazards[pred_class]['Health']}</p></div>", unsafe_allow_html=True)
+with st.sidebar.expander("Tools Used"):
+    st.write("- Python  \n- Streamlit  \n- TensorFlow / Keras  \n- Pillow  \n- NumPy")
 
-            col2.markdown(f"<div style='background-color:#cce5ff; padding:10px; border-radius:10px; color:black;'>"
-                          f"<h5>🌱 Environmental</h5>"
-                          f"<p>{hazards[pred_class]['Environmental']}</p></div>", unsafe_allow_html=True)
+with st.sidebar.expander("SDG Impact 🌍"):
+    st.write(
+        "- SDG 12: Responsible Consumption and Production  \n"
+        "- SDG 11: Sustainable Cities and Communities  \n"
+        "- SDG 13: Climate Action"
+    )
 
-            col3.markdown(f"<div style='background-color:#d4edda; padding:10px; border-radius:10px; color:black;'>"
-                          f"<h5>🌍 Climatic</h5>"
-                          f"<p>{hazards[pred_class]['Climatic']}</p></div>", unsafe_allow_html=True)
+# -----------------------
+# Main App
+# -----------------------
+st.set_page_config(page_title="Waste Classifier", page_icon="♻️", layout="wide")
+st.title("♻️ AI Waste Classification Tool")
+st.markdown("Upload an image of waste and see instant classification with recycling tips!")
+
+model = load_model()
+
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
+
+if uploaded_file:
+    img = Image.open(uploaded_file)
+
+    # Layout: Columns
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        st.image(img, caption="Uploaded Image", use_column_width=True)
+
+    with col2:
+        st.write("Classifying...")
+        pred_class = predict_waste(img, model)
+
+        # Emoji mapping
+        emoji_map = {
+            "Plastic": "🧴",
+            "Organic": "🍌",
+            "Paper": "📄",
+            "Metal": "🔩",
+            "E-waste": "💻",
+            "Unknown": "❓"
+        }
+
+        # Display prediction with emoji inline
+        st.markdown(f"<h2 style='color:green'>{emoji_map.get(pred_class,'❓')} {pred_class}</h2>", unsafe_allow_html=True)
+
+        # Tips
+        tips = {
+            "Plastic": "Recycle plastics and avoid single-use plastic.",
+            "Organic": "Compost organic waste to make nutrient-rich soil.",
+            "Paper": "Reuse or recycle paper products.",
+            "Metal": "Collect and recycle metals at proper centers.",
+            "E-waste": "Take to e-waste recycling centers safely.",
+            "Unknown": "Try uploading a clearer image."
+        }
+        st.info(tips[pred_class])
+
+        # Display hazards in colored cards with bullet points
+        with st.expander(f"⚠️ Hazards of {pred_class} Waste"):
+            col1, col2, col3 = st.columns(3)
+
+            # Health Card
+            col1.markdown(
+                f"<div style='background-color:#ffcccc; padding:15px; border-radius:10px; color:black;'>"
+                f"<h4>💊 Health</h4>"
+                f"<ul>{''.join([f'<li>{item}</li>' for item in hazards[pred_class]['Health']])}</ul>"
+                f"</div>", unsafe_allow_html=True
+            )
+
+            # Environmental Card
+            col2.markdown(
+                f"<div style='background-color:#cce5ff; padding:15px; border-radius:10px; color:black;'>"
+                f"<h4>🌱 Environmental</h4>"
+                f"<ul>{''.join([f'<li>{item}</li>' for item in hazards[pred_class]['Environmental']])}</ul>"
+                f"</div>", unsafe_allow_html=True
+            )
+
+            # Climatic Card
+            col3.markdown(
+                f"<div style='background-color:#d4edda; padding:15px; border-radius:10px; color:black;'>"
+                f"<h4>🌍 Climatic</h4>"
+                f"<ul>{''.join([f'<li>{item}</li>' for item in hazards[pred_class]['Climatic']])}</ul>"
+                f"</div>", unsafe_allow_html=True
+            )
