@@ -41,7 +41,7 @@ waste-classifier/
 │   ├── organic.jpg
 │   ├── paper.jpg
 │   └── plastic.jpg
-├── .gitignore
+├── .gitignore            # To exclude unnecessary files from repo
 ├── README.md             # Project documentation
 ├── app.py                # Main Streamlit application
 └── requirements.txt      # Project dependencies
