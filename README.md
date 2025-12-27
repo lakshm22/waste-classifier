@@ -46,8 +46,8 @@ waste-classifier/
 ## How to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/waste-classifier.git
-   cd waste-classifier
+    git clone https://github.com/your-username/waste-classifier.git
+    cd waste-classifier
    
 2. Install dependencies:
    <pre>
