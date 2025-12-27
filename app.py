@@ -106,51 +106,102 @@ if uploaded_file:
         st.info(tips[pred_class])
 
         # Hazards by waste type
-        hazards = {
-            "Plastic": {
-                "Health": "Releases toxic chemicals into soil and water; blocks drainage; microplastics enter food chain.",
-                "Environmental": "Soil and water contamination; harm to wildlife due to ingestion or entanglement.",
-                "Climatic": "Production and incineration release greenhouse gases; contributes to global warming."
-            },
-            "Organic": {
-                "Health": "Produces foul odors and methane; attracts rodents and insects, spreading diseases.",
-                "Environmental": "Improper disposal pollutes soil and water; attracts pests.",
-                "Climatic": "Methane emissions from decomposition; contributes to global warming."
-            },
-            "Paper": {
-                "Health": "Can accumulate and become a fire hazard.",
-                "Environmental": "Waste buildup can block drainage and pollute soil.",
-                "Climatic": "Decomposition produces small amounts of methane."
-            },
-            "Metal": {
-                "Health": "Rust contaminates water; sharp edges can cause injuries.",
-                "Environmental": "Toxic metals can leach into soil and water.",
-                "Climatic": "Energy-intensive production and improper disposal contribute to greenhouse gases."
-            },
-            "E-waste": {
-                "Health": "Contains heavy metals like lead and mercury; can damage kidneys, liver, nervous system, and affect children.",
-                "Environmental": "Leaches toxins into soil and water; harms wildlife.",
-                "Climatic": "Improper incineration releases greenhouse gases and toxic fumes."
-            },
-            "Unknown": {
-                "Health": "Unknown hazards. Try uploading a clearer image.",
-                "Environmental": "Unknown hazards.",
-                "Climatic": "Unknown hazards."
-            }
-        }
+hazards = {
+    "Plastic": {
+        "Health": [
+            "Toxic chemicals leach into soil and water.",
+            "Microplastics enter the food chain, causing digestive and hormonal issues.",
+            "Burning plastics releases dioxins and furans—respiratory irritants."
+        ],
+        "Environmental": [
+            "Pollutes oceans, rivers, and soil.",
+            "Wildlife ingests or gets entangled, leading to injury or death.",
+            "Non-biodegradable; persists for hundreds of years in landfills."
+        ],
+        "Climatic": [
+            "Incineration produces greenhouse gases.",
+            "Manufacturing plastics consumes fossil fuels, adding to carbon footprint.",
+            "Contributes indirectly to global warming and ocean acidification."
+        ]
+    },
+    "Organic": {
+        "Health": [
+            "Rotting organic matter attracts rodents, flies, and disease vectors.",
+            "Produces foul odors and harmful gases like methane and ammonia.",
+            "Can cause respiratory issues and spread bacterial infections."
+        ],
+        "Environmental": [
+            "Decomposing organic waste pollutes soil and water if unmanaged.",
+            "Can lead to algal blooms when nutrients leach into water bodies.",
+            "Attracts pests, increasing local ecological imbalance."
+        ],
+        "Climatic": [
+            "Methane emissions from decomposition are ~28x more potent than CO₂.",
+            "Contributes significantly to urban greenhouse gas emissions.",
+            "Poor management can worsen urban flooding through blocked drains."
+        ]
+    },
+    "Paper": {
+        "Health": [
+            "Accumulated paper waste can be a fire hazard.",
+            "Dust from shredded paper may irritate respiratory systems."
+        ],
+        "Environmental": [
+            "Landfill accumulation uses space and can block drainage.",
+            "Decomposing paper produces small amounts of methane.",
+            "Wasteful consumption of trees reduces forest cover."
+        ],
+        "Climatic": [
+            "Deforestation for paper production reduces carbon sequestration.",
+            "Decomposition releases greenhouse gases contributing to warming."
+        ]
+    },
+    "Metal": {
+        "Health": [
+            "Sharp edges can cause physical injuries.",
+            "Toxic metals (like lead, cadmium) can leach and affect organs."
+        ],
+        "Environmental": [
+            "Heavy metals contaminate soil and water.",
+            "Can bioaccumulate in plants and animals.",
+            "Mining and disposal disrupt ecosystems."
+        ],
+        "Climatic": [
+            "Energy-intensive production emits CO₂.",
+            "Improper disposal can release harmful gases when incinerated."
+        ]
+    },
+    "E-waste": {
+        "Health": [
+            "Contains lead, mercury, cadmium—damaging to kidneys, liver, nervous system.",
+            "Children exposed to e-waste may suffer developmental delays.",
+            "Burning or dismantling releases toxic fumes causing respiratory problems."
+        ],
+        "Environmental": [
+            "Leaches toxins into soil and groundwater.",
+            "Affects plant growth and contaminates food chains.",
+            "Causes long-term ecological damage if not recycled properly."
+        ],
+        "Climatic": [
+            "Incineration releases CO₂ and toxic gases.",
+            "Energy used in processing and recycling contributes to carbon footprint.",
+            "Improper disposal increases greenhouse gas emissions indirectly."
+        ]
+    }
+}
 
         # Display only hazards relevant to predicted waste type in colored cards
         with st.expander(f"⚠️ Hazards of {pred_class} Waste"):
             col1, col2, col3 = st.columns(3)
 
-            col1.markdown(f"<div style='background-color:#ffcccc; padding:10px; border-radius:10px;'>"
-                          f"<h4>💊 Health</h4>"
+            col1.markdown(f"<div style='background-color:#ffcccc; padding:10px; border-radius:10px; color:black;'>"
+                          f"<h5>💊 Health</h5>"
                           f"<p>{hazards[pred_class]['Health']}</p></div>", unsafe_allow_html=True)
 
-            col2.markdown(f"<div style='background-color:#cce5ff; padding:10px; border-radius:10px;'>"
-                          f"<h4>🌱 Environmental</h4>"
+            col2.markdown(f"<div style='background-color:#cce5ff; padding:10px; border-radius:10px; color:black;'>"
+                          f"<h5>🌱 Environmental</h5>"
                           f"<p>{hazards[pred_class]['Environmental']}</p></div>", unsafe_allow_html=True)
 
-            col3.markdown(f"<div style='background-color:#d4edda; padding:10px; border-radius:10px;'>"
-                          f"<h4>🌍 Climatic</h4>"
+            col3.markdown(f"<div style='background-color:#d4edda; padding:10px; border-radius:10px; color:black;'>"
+                          f"<h5>🌍 Climatic</h5>"
                           f"<p>{hazards[pred_class]['Climatic']}</p></div>", unsafe_allow_html=True)
