@@ -25,8 +25,8 @@
 ---
 
 ## SDG Impact 🌍
-- SDG 12: Responsible Consumption and Production  
-- SDG 11: Sustainable Cities and Communities  
+- SDG 11: Sustainable Cities and Communities
+- SDG 12: Responsible Consumption and Production    
 - SDG 13: Climate Action  
 
 ---
