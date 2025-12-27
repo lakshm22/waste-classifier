@@ -169,7 +169,7 @@ with st.sidebar.expander("SDG Impact 🌍"):
         "- SDG 13: Climate Action"
     )
 st.sidebar.markdown("---")
-st.sidebar.caption("Created by [Lakshitha M](https://github.com/lakshm22) | AI for Sustainability Project")
+st.sidebar.caption("Created by [Lakshitha M](https://github.com/lakshm22)")
 
 # -----------------------
 # Main App
