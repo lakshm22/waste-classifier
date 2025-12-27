@@ -1,69 +1,94 @@
 import streamlit as st
 from PIL import Image
-import tensorflow as tf
-import numpy as np
-from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input, decode_predictions
-from tensorflow.keras.preprocessing import image
+import torch
+import torchvision.transforms as transforms
+from torchvision import models
 
 # -----------------------
 # Helper Functions
 # -----------------------
 
-# Load pre-trained MobileNetV2
-@st.cache_resource  # Cache the model so it loads only once
+# Load pre-trained ResNet18
+@st.cache_resource
 def load_model():
-    model = MobileNetV2(weights="imagenet")
+    model = models.resnet18(pretrained=True)
+    model.eval()  # set to evaluation mode
     return model
 
-# Preprocess image for prediction
+# Image preprocessing
 def preprocess_img(img):
-    img = img.resize((224, 224))
-    img_array = image.img_to_array(img)
-    img_array = np.expand_dims(img_array, axis=0)
-    img_array = preprocess_input(img_array)
-    return img_array
+    preprocess = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
+    ])
+    return preprocess(img).unsqueeze(0)  # add batch dimension
+
+# Map ImageNet classes to waste types
+imagenet_to_waste = {
+    "banana": "Organic",
+    "orange": "Organic",
+    "lemon": "Organic",
+    "potato": "Organic",
+    "plastic_bag": "Plastic",
+    "bottle": "Plastic",
+    "cup": "Plastic",
+    "container": "Plastic",
+    "envelope": "Paper",
+    "book": "Paper",
+    "paper_towel": "Paper",
+    "computer_keyboard": "E-waste",
+    "monitor": "E-waste",
+    "cellular_telephone": "E-waste",
+    "screwdriver": "Metal",
+    "hammer": "Metal",
+    "spoon": "Metal"
+}
+
+# Load ImageNet labels
+@st.cache_resource
+def load_labels():
+    import json, urllib.request
+    url = "https://raw.githubusercontent.com/pytorch/hub/master/imagenet_classes.txt"
+    labels = []
+    with urllib.request.urlopen(url) as f:
+        for line in f:
+            labels.append(line.decode("utf-8").strip())
+    return labels
 
 # Predict waste type
-def predict_waste(img, model):
-    processed = preprocess_img(img)
-    preds = model.predict(processed)
-    decoded = decode_predictions(preds, top=3)[0]
-
-    # Map general ImageNet classes to simple waste types
-    for _, name, prob in decoded:
-        if name in ["banana", "orange", "lemon", "potato"]:
-            return "Organic"
-        elif name in ["plastic_bag", "bottle", "cup", "container"]:
-            return "Plastic"
-        elif name in ["envelope", "book", "paper_towel"]:
-            return "Paper"
-        elif name in ["computer_keyboard", "monitor", "cellular_telephone"]:
-            return "E-waste"
-        elif name in ["screwdriver", "hammer", "spoon"]:
-            return "Metal"
-    return "Unknown"
+def predict_waste(img, model, labels):
+    input_tensor = preprocess_img(img)
+    with torch.no_grad():
+        outputs = model(input_tensor)
+    _, predicted = outputs.max(1)
+    imagenet_class = labels[predicted.item()]
+    return imagenet_to_waste.get(imagenet_class, "Unknown")
 
 # -----------------------
 # Streamlit App
 # -----------------------
 
 st.set_page_config(page_title="Waste Classifier", page_icon="♻️")
-st.title("♻️ AI Waste Classification Tool")
+st.title("♻️ AI Waste Classification Tool (PyTorch)")
 st.write("Upload an image of waste and get sustainability tips!")
 
-# Load the model
+# Load model and labels
 model = load_model()
+labels = load_labels()
 
-# Image uploader
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
 if uploaded_file:
-    img = Image.open(uploaded_file)
+    img = Image.open(uploaded_file).convert("RGB")
     st.image(img, caption="Uploaded Image", use_column_width=True)
     st.write("Classifying...")
-    pred_class = predict_waste(img, model)
+    pred_class = predict_waste(img, model, labels)
     st.success(f"Predicted Waste Type: **{pred_class}**")
 
-    # Tips for each waste type
     tips = {
         "Plastic": "Recycle plastics and avoid single-use plastic.",
         "Organic": "Compost organic waste to make nutrient-rich soil.",
@@ -74,7 +99,6 @@ if uploaded_file:
     }
     st.info(tips[pred_class])
 
-# Optional SDG impact section
 st.markdown("---")
 st.subheader("🌍 SDG Impact")
 st.markdown("""
