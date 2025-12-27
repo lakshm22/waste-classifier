@@ -50,14 +50,12 @@ waste-classifier/
    cd waste-classifier
    
 2. Install dependencies:
-   <pre>
+   ```bash
    pip install -r requirements.txt
-   </pre>
 
 4. Run the Streamlit app:
-   <pre>
+   ```bash
    streamlit run app.py
-   </pre>
 
 ---
 
