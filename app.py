@@ -25,42 +25,43 @@ def predict_waste(img, model):
     preds = model.predict(processed)
     decoded = decode_predictions(preds, top=3)[0]
 
-for _, name, prob in decoded:
-    # Organic Waste
-    if name in [
-        "banana", "orange", "lemon", "potato", "apple", "tomato", "carrot", "onion",
-        "lettuce", "garlic", "mango", "papaya", "peach", "cabbage", "spinach"
-    ]:
-        return "Organic"
+    for _, name, prob in decoded:
+        # Organic Waste
+        if name in [
+            "banana", "orange", "lemon", "potato", "apple", "tomato", "carrot", "onion",
+            "lettuce", "garlic", "mango", "papaya", "peach", "cabbage", "spinach"
+        ]:
+            return "Organic"
 
-    # Plastic Waste
-    elif name in [
-        "plastic_bag", "bottle", "cup", "container", "straw", "utensil", "plastic_box",
-        "bag", "wrapper", "packaging"
-    ]:
-        return "Plastic"
+        # Plastic Waste
+        elif name in [
+            "plastic_bag", "bottle", "cup", "container", "straw", "utensil", "plastic_box",
+            "bag", "wrapper", "packaging"
+        ]:
+            return "Plastic"
 
-    # Paper Waste
-    elif name in [
-        "envelope", "book", "paper_towel", "newspaper", "magazine", "notebook",
-        "cardboard", "flyer", "receipt", "paper_sheet"
-    ]:
-        return "Paper"
+        # Paper Waste
+        elif name in [
+            "envelope", "book", "paper_towel", "newspaper", "magazine", "notebook",
+            "cardboard", "flyer", "receipt", "paper_sheet"
+        ]:
+            return "Paper"
 
-    # E-waste
-    elif name in [
-        "computer_keyboard", "monitor", "cellular_telephone", "laptop", "mobile", "battery",
-        "printer", "mouse", "tablet", "router"
-    ]:
-        return "E-waste"
+        # E-waste
+        elif name in [
+            "computer_keyboard", "monitor", "cellular_telephone", "laptop", "mobile", "battery",
+            "printer", "mouse", "tablet", "router"
+        ]:
+            return "E-waste"
 
-    # Metal Waste
-    elif name in [
-        "screwdriver", "hammer", "spoon", "fork", "knife", "can", "metal_pipe",
-        "nail", "bolt", "pan"
-    ]:
-        return "Metal"
+        # Metal Waste
+        elif name in [
+            "screwdriver", "hammer", "spoon", "fork", "knife", "can", "metal_pipe",
+            "nail", "bolt", "pan"
+        ]:
+            return "Metal"
 
+    return "Unknown"
 
 # -----------------------
 # Hazards Dictionary
@@ -169,7 +170,7 @@ with st.sidebar.expander("SDG Impact 🌍"):
         "- SDG 13: Climate Action"
     )
 st.sidebar.markdown("---")
-st.sidebar.caption("Created by [Lakshitha M](https://github.com/lakshm22)")
+st.sidebar.caption("Built by [Lakshitha M](https://github.com/lakshm22)")
 
 # -----------------------
 # Main App
