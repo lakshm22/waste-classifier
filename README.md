@@ -35,10 +35,10 @@
 <pre>
 waste-classifier/
 │
-├── app.py                # Main Streamlit application
-├── requirements.txt      # Project dependencies
+├── .gitignore
 ├── README.md             # Project documentation
-└── assets/               # (Optional) Images or assets used in the app
+├── app.py                # Main Streamlit application
+└── requirements.txt      # Project dependencies
 </pre>
 
 ---
@@ -49,11 +49,9 @@ waste-classifier/
    git clone https://github.com/your-username/waste-classifier.git
    cd waste-classifier
    
-2. Install dependencies:
-   pip install -r requirements.txt
+2. Install dependencies:   pip install -r requirements.txt
 
-3. Run the Streamlit app:
-   streamlit run app.py
+4. Run the Streamlit app:   streamlit run app.py
 
 ---
 
