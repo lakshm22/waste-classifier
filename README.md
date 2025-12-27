@@ -43,21 +43,5 @@ waste-classifier/
 
 ---
 
-## How to Run
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/waste-classifier.git
-   cd waste-classifier
-   
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-
-4. Run the Streamlit app:
-   ```bash
-   streamlit run app.py
-
----
-
 ## Demo
 Check out the live app here:  [Waste Classifier](https://waste-classifier-dvnkd7jhsqmjiyvbmkaqpx.streamlit.app/)
