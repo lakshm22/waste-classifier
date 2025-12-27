@@ -91,6 +91,7 @@ if uploaded_file:
             "Unknown": "❓"
         }
 
+        # Display prediction with emoji inline
         st.markdown(f"<h2 style='color:green'>{emoji_map.get(pred_class,'❓')} {pred_class}</h2>", unsafe_allow_html=True)
 
         # Tips
@@ -104,23 +105,42 @@ if uploaded_file:
         }
         st.info(tips[pred_class])
 
-        # Collapsible Hazards Section
-        with st.expander("⚠️ Hazards of Improper Waste Disposal"):
-            st.markdown("""
-            ### Health Hazards
-            **Plastic:** Releases toxic chemicals into soil and water; blocks drainage; microplastics enter food chain.  
-            **Organic Waste:** Produces foul odors and methane; attracts rodents and insects, spreading diseases.  
-            **Paper Waste:** Can accumulate and become a fire hazard.  
-            **Metal Waste:** Rust contaminates water; sharp edges can cause injuries.  
-            **E-waste:** Contains heavy metals like lead and mercury; can damage kidneys, liver, nervous system, and cause developmental issues in children.
+        # Hazards by waste type
+        hazards = {
+            "Plastic": {
+                "Health": "Releases toxic chemicals into soil and water; blocks drainage; microplastics enter food chain.",
+                "Environmental": "Soil and water contamination; harm to wildlife due to ingestion or entanglement.",
+                "Climatic": "Production and incineration release greenhouse gases; contributes to global warming."
+            },
+            "Organic": {
+                "Health": "Produces foul odors and methane; attracts rodents and insects, spreading diseases.",
+                "Environmental": "Improper disposal pollutes soil and water; attracts pests.",
+                "Climatic": "Methane emissions from decomposition; contributes to global warming."
+            },
+            "Paper": {
+                "Health": "Can accumulate and become a fire hazard.",
+                "Environmental": "Waste buildup can block drainage and pollute soil.",
+                "Climatic": "Decomposition produces small amounts of methane."
+            },
+            "Metal": {
+                "Health": "Rust contaminates water; sharp edges can cause injuries.",
+                "Environmental": "Toxic metals can leach into soil and water.",
+                "Climatic": "Energy-intensive production and improper disposal contribute to greenhouse gases."
+            },
+            "E-waste": {
+                "Health": "Contains heavy metals like lead and mercury; can damage kidneys, liver, nervous system, and affect children.",
+                "Environmental": "Leaches toxins into soil and water; harms wildlife.",
+                "Climatic": "Improper incineration releases greenhouse gases and toxic fumes."
+            },
+            "Unknown": {
+                "Health": "Unknown hazards. Try uploading a clearer image.",
+                "Environmental": "Unknown hazards.",
+                "Climatic": "Unknown hazards."
+            }
+        }
 
-            ### Environmental Hazards
-            - Soil and water contamination from plastics, metals, and chemicals.  
-            - Accumulation of non-biodegradable waste in landfills.  
-            - Harm to wildlife due to ingestion or entanglement.  
-
-            ### Climatic Hazards
-            - Methane emissions from decomposing organic waste contribute to global warming.  
-            - Mismanaged waste can worsen urban flooding due to blocked drains.  
-            - Incineration of waste produces greenhouse gases and particulate matter affecting climate and air quality.
-            """)
+        # Display only hazards relevant to predicted waste type
+        with st.expander(f"⚠️ Hazards of {pred_class} Waste"):
+            st.markdown(f"**Health Hazards:** {hazards[pred_class]['Health']}")
+            st.markdown(f"**Environmental Hazards:** {hazards[pred_class]['Environmental']}")
+            st.markdown(f"**Climatic Hazards:** {hazards[pred_class]['Climatic']}")
