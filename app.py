@@ -1,69 +1,69 @@
 import streamlit as st
 from PIL import Image
+import tensorflow as tf
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
-import os
-import pickle
+from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
 
 # -----------------------
 # Helper Functions
 # -----------------------
 
-# Extract simple color histogram features from image
-def extract_features(img):
-    img = img.resize((100, 100))  # resize for consistency
-    img_array = np.array(img)
-    hist = []
-    for i in range(3):  # R, G, B channels
-        channel_hist = np.histogram(img_array[:, :, i], bins=16, range=(0, 256))[0]
-        hist.extend(channel_hist)
-    hist = np.array(hist) / np.sum(hist)  # normalize
-    return hist
-
-# Train a simple KNN classifier (or load pre-trained)
-@st.cache_resource
+# Load pre-trained MobileNetV2
+@st.cache_resource  # Cache the model so it loads only once
 def load_model():
-    model_file = "knn_model.pkl"
-    if os.path.exists(model_file):
-        with open(model_file, "rb") as f:
-            knn = pickle.load(f)
-    else:
-        # If no model exists, train a dummy classifier (for demo)
-        X_dummy = np.random.rand(10, 48)  # 10 random feature vectors
-        y_dummy = ["Plastic", "Organic", "Paper", "Metal", "E-waste"] * 2
-        knn = KNeighborsClassifier(n_neighbors=1)
-        knn.fit(X_dummy, y_dummy)
-        with open(model_file, "wb") as f:
-            pickle.dump(knn, f)
-    return knn
+    model = MobileNetV2(weights="imagenet")
+    return model
+
+# Preprocess image for prediction
+def preprocess_img(img):
+    img = img.resize((224, 224))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array = preprocess_input(img_array)
+    return img_array
 
 # Predict waste type
 def predict_waste(img, model):
-    features = extract_features(img)
-    pred = model.predict([features])
-    return pred[0]
+    processed = preprocess_img(img)
+    preds = model.predict(processed)
+    decoded = decode_predictions(preds, top=3)[0]
+
+    # Map general ImageNet classes to simple waste types
+    for _, name, prob in decoded:
+        if name in ["banana", "orange", "lemon", "potato"]:
+            return "Organic"
+        elif name in ["plastic_bag", "bottle", "cup", "container"]:
+            return "Plastic"
+        elif name in ["envelope", "book", "paper_towel"]:
+            return "Paper"
+        elif name in ["computer_keyboard", "monitor", "cellular_telephone"]:
+            return "E-waste"
+        elif name in ["screwdriver", "hammer", "spoon"]:
+            return "Metal"
+    return "Unknown"
 
 # -----------------------
 # Streamlit App
 # -----------------------
 
-st.set_page_config(page_title="Waste Classifier (Lightweight)", page_icon="♻️")
-st.title("♻️ Waste Classifier (Lightweight)")
+st.set_page_config(page_title="Waste Classifier", page_icon="♻️")
+st.title("♻️ AI Waste Classification Tool")
 st.write("Upload an image of waste and get sustainability tips!")
 
-# Load lightweight model
+# Load the model
 model = load_model()
 
 # Image uploader
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
 if uploaded_file:
-    img = Image.open(uploaded_file).convert("RGB")
+    img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image", use_column_width=True)
     st.write("Classifying...")
     pred_class = predict_waste(img, model)
     st.success(f"Predicted Waste Type: **{pred_class}**")
 
-    # Recycling tips
+    # Tips for each waste type
     tips = {
         "Plastic": "Recycle plastics and avoid single-use plastic.",
         "Organic": "Compost organic waste to make nutrient-rich soil.",
@@ -72,8 +72,9 @@ if uploaded_file:
         "E-waste": "Take to e-waste recycling centers safely.",
         "Unknown": "Try uploading a clearer image."
     }
-    st.info(tips.get(pred_class, "Unknown"))
+    st.info(tips[pred_class])
 
+# Optional SDG impact section
 st.markdown("---")
 st.subheader("🌍 SDG Impact")
 st.markdown("""
