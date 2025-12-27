@@ -139,8 +139,18 @@ if uploaded_file:
             }
         }
 
-        # Display only hazards relevant to predicted waste type
+        # Display only hazards relevant to predicted waste type in colored cards
         with st.expander(f"⚠️ Hazards of {pred_class} Waste"):
-            st.markdown(f"**Health Hazards:** {hazards[pred_class]['Health']}")
-            st.markdown(f"**Environmental Hazards:** {hazards[pred_class]['Environmental']}")
-            st.markdown(f"**Climatic Hazards:** {hazards[pred_class]['Climatic']}")
+            col1, col2, col3 = st.columns(3)
+
+            col1.markdown(f"<div style='background-color:#ffcccc; padding:10px; border-radius:10px;'>"
+                          f"<h4>💊 Health</h4>"
+                          f"<p>{hazards[pred_class]['Health']}</p></div>", unsafe_allow_html=True)
+
+            col2.markdown(f"<div style='background-color:#cce5ff; padding:10px; border-radius:10px;'>"
+                          f"<h4>🌱 Environmental</h4>"
+                          f"<p>{hazards[pred_class]['Environmental']}</p></div>", unsafe_allow_html=True)
+
+            col3.markdown(f"<div style='background-color:#d4edda; padding:10px; border-radius:10px;'>"
+                          f"<h4>🌍 Climatic</h4>"
+                          f"<p>{hazards[pred_class]['Climatic']}</p></div>", unsafe_allow_html=True)
