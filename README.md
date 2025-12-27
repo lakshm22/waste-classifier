@@ -35,6 +35,12 @@
 <pre>
 waste-classifier/
 │
+├── sample-images/        # Folder for sample images
+│    ├── banana.jpg
+│    ├── bottle.jpg
+│    ├── hammer.jpg
+│    ├── monitor.jpg
+│    └── paper.jpg
 ├── .gitignore
 ├── README.md             # Project documentation
 ├── app.py                # Main Streamlit application
