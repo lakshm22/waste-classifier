@@ -191,8 +191,8 @@ hazards = {
 }
 
         # Display only hazards relevant to predicted waste type in colored cards
-        with st.expander(f"⚠️ Hazards of {pred_class} Waste"):
-            col1, col2, col3 = st.columns(3)
+    with st.expander(f"⚠️ Hazards of {pred_class} Waste"):
+        col1, col2, col3 = st.columns(3)
 
             col1.markdown(f"<div style='background-color:#ffcccc; padding:10px; border-radius:10px; color:black;'>"
                           f"<h5>💊 Health</h5>"
