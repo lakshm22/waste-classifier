@@ -199,7 +199,7 @@ if uploaded_file:
             # Health Card
             col1.markdown(
                 f"<div style='background-color:#ffcccc; padding:15px; border-radius:10px; color:black;'>"
-                f"<h4>💊 Health</h4>"
+                f"<h5>💊 Health</h5>"
                 f"<ul>{''.join([f'<li>{item}</li>' for item in hazards[pred_class]['Health']])}</ul>"
                 f"</div>", unsafe_allow_html=True
             )
@@ -207,7 +207,7 @@ if uploaded_file:
             # Environmental Card
             col2.markdown(
                 f"<div style='background-color:#cce5ff; padding:15px; border-radius:10px; color:black;'>"
-                f"<h4>🌱 Environmental</h4>"
+                f"<h5>🌱 Environmental</h5>"
                 f"<ul>{''.join([f'<li>{item}</li>' for item in hazards[pred_class]['Environmental']])}</ul>"
                 f"</div>", unsafe_allow_html=True
             )
@@ -215,7 +215,7 @@ if uploaded_file:
             # Climatic Card
             col3.markdown(
                 f"<div style='background-color:#d4edda; padding:15px; border-radius:10px; color:black;'>"
-                f"<h4>🌍 Climatic</h4>"
+                f"<h5>🌍 Climatic</h5>"
                 f"<ul>{''.join([f'<li>{item}</li>' for item in hazards[pred_class]['Climatic']])}</ul>"
                 f"</div>", unsafe_allow_html=True
             )
