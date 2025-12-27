@@ -56,4 +56,4 @@ waste-classifier/
 ---
 
 ## Demo
-Check out the live app here: [Waste Classifier](https://waste-classifier-dvnkd7jhsqmjiyvbmkaqpx.streamlit.app/)
+Check out the live app here:  [Waste Classifier](https://waste-classifier-dvnkd7jhsqmjiyvbmkaqpx.streamlit.app/)
